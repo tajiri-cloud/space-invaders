@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スペースインベーダー</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #000000, #1a1a2e);
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+        }
+
+        #gameCanvas {
+            border: 3px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            background: #000000;
+        }
+
+        #gameInfo {
+            margin-top: 20px;
+            display: flex;
+            gap: 30px;
+            font-size: 18px;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+        }
+
+        #startScreen, #gameOverScreen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            z-index: 10;
+        }
+
+        #startScreen h1, #gameOverScreen h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 1);
+        }
+
+        #startScreen p, #gameOverScreen p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .button {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 20px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background: #00cc00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="startScreen">
+        <h1>スペースインベーダー</h1>
+        <p>← →: 移動</p>
+        <p>スペースキー: 発射</p>
+        <p>P: 一時停止</p>
+        <button class="button" onclick="startGame()">ゲーム開始</button>
+    </div>
+
+    <div id="gameOverScreen" class="hidden">
+        <h1 id="gameOverTitle">GAME OVER</h1>
+        <p id="finalScore"></p>
+        <p id="highScoreDisplay"></p>
+        <button class="button" onclick="restartGame()">再挑戦</button>
+    </div>
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <div id="gameInfo">
+        <div>スコア: <span id="score">0</span></div>
+        <div>ライフ: <span id="lives">3</span></div>
+        <div>レベル: <span id="level">1</span></div>
+        <div>ハイスコア: <span id="highScore">0</span></div>
+    </div>
+
+    <script src="space-invaders.js"></script>
+</body>
+</html>
