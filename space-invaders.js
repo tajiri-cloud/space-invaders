@@ -17,7 +17,7 @@ let enemyBullets = [];
 let barriers = [];
 let powerUps = [];
 let particles = [];
-let ufo = null;
+let ufos = []; // Changed to array for multiple UFOs
 let enemyDirection = 1; // 1 for right, -1 for left
 let enemyMoveCounter = 0;
 
@@ -354,7 +354,7 @@ function initGame() {
     barriers = [];
     powerUps = [];
     particles = [];
-    ufo = null;
+    ufos = [];
     enemyDirection = 1;
     enemyMoveCounter = 0;
 
@@ -470,19 +470,21 @@ function checkCollisions() {
             }
         });
 
-        if (ufo &&
-            bullet.x < ufo.x + ufo.width &&
-            bullet.x + bullet.width > ufo.x &&
-            bullet.y < ufo.y + ufo.height &&
-            bullet.y + bullet.height > ufo.y) {
+        // Check collision with UFOs
+        ufos.forEach((ufo, ufoIndex) => {
+            if (bullet.x < ufo.x + ufo.width &&
+                bullet.x + bullet.width > ufo.x &&
+                bullet.y < ufo.y + ufo.height &&
+                bullet.y + bullet.height > ufo.y) {
 
-            score += ufo.points;
-            createExplosion(ufo.x + ufo.width / 2, ufo.y + ufo.height / 2, '#ff00ff');
-            playSound(500, 0.3, 'sine');
-            playerBullets.splice(bulletIndex, 1);
-            ufo = null;
-            updateUI();
-        }
+                score += ufo.points;
+                createExplosion(ufo.x + ufo.width / 2, ufo.y + ufo.height / 2, '#ff00ff');
+                playSound(500, 0.3, 'sine');
+                playerBullets.splice(bulletIndex, 1);
+                ufos.splice(ufoIndex, 1);
+                updateUI();
+            }
+        });
     });
 
     enemyBullets.forEach((bullet, bulletIndex) => {
@@ -534,8 +536,10 @@ function checkCollisions() {
 }
 
 function spawnUFO() {
-    if (!ufo && Math.random() < 0.002) {
-        ufo = new UFO();
+    // Allow up to 3 UFOs at once, spawn more frequently
+    const maxUFOs = 3;
+    if (ufos.length < maxUFOs && Math.random() < 0.005) {
+        ufos.push(new UFO());
         playSound(800, 0.1, 'sawtooth');
     }
 }
@@ -649,13 +653,14 @@ function gameLoop() {
             }
         });
 
-        if (ufo) {
+        // Update and draw all UFOs
+        ufos.forEach((ufo, index) => {
             ufo.update();
             ufo.draw();
             if (ufo.isOffScreen()) {
-                ufo = null;
+                ufos.splice(index, 1);
             }
-        }
+        });
 
         spawnUFO();
         checkCollisions();
